@@ -1,55 +1,24 @@
+import {MyGame} from "./MyGame.ts";
+import {Renderer} from "./Renderer.ts";
 
-// OOP
+const canvas = document.querySelector("canvas")!;
+canvas.width = window.innerWidth;
+canvas.height = window.innerHeight;
+const ctx = canvas.getContext("2d")!;
 
-class Player {
+const state = new MyGame();
+const renderer = new Renderer(ctx);
 
-  private readonly DEFAULT_SPEED = 10;
-  private readonly WEAK_SPEED = 5;
-  private readonly SPEED_DECREAING_THREASHOLD = 20;
+let lastTime = 0;
 
-  private hitPoints = 100
-  private _hasHat = true;
+function gameLoop(timestamp: number) {
+  const deltaTime = timestamp - lastTime;
+  lastTime = timestamp;
 
-  public hit(hitPoints: number): void {
-    if (hitPoints < 0)
-      throw new Error('Blanker Unsinn!')
-    this.hitPoints -= hitPoints;
-    this.calculateState();
-  }
+  state.update(deltaTime);
+  renderer.render(state);
 
-  public heal(hitPoints: number): void {
-    if (hitPoints < 0)
-      throw new Error('Blanker Unsinn!')
-    this.hitPoints += hitPoints;
-    this.calculateState();
-  }
-
-  public get speed(): number {
-    return this.hitPoints >= this.SPEED_DECREAING_THREASHOLD
-      ? this.DEFAULT_SPEED
-      : this.WEAK_SPEED;
-  }
-
-  public get hasHat(): boolean {
-    return this._hasHat;
-  }
-
-  private calculateState(): void {
-  
-    if (this.hitPoints < 10) {
-      this._hasHat = false;
-    }
-  }
+  requestAnimationFrame(gameLoop);
 }
 
-
-
-
-const player1 = new Player();
-
-player1.hit(50);
-player1.speed = 42;
-player1.hasHat;
-
-
-
+requestAnimationFrame(gameLoop);
