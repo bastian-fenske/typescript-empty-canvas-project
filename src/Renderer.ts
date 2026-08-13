@@ -22,6 +22,6 @@ export class Renderer {
     private drawScore(score: number) {
       this.ctx.font = "24px Arial";
       this.ctx.fillStyle = "black";
-      this.ctx.fillText(`Score: ${score}`, 20, 50);
+      this.ctx.fillText(`My Score: ${score}`, 20, 50);
     }
 }
