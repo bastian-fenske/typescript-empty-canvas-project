@@ -27,5 +27,5 @@
     "noUnusedLocals": true,
     "erasableSyntaxOnly": true,
   },
-  "include": ["src"]
+  "include": ["src", "api-key.ts"]
 }

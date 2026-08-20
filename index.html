@@ -3,28 +3,13 @@
 <head>
     <meta charset="UTF-8"/>
     <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-    <title>learning-typescript</title>
+    <title>AI Game Generator</title>
     <script type="module" src="./src/main.ts" defer></script>
-    <style>
-        html,
-        body {
-            margin: 0;
-            width: 100%;
-            height: 100%;
-        }
-    </style>
+    <link rel="stylesheet" href="./src/style.css">
 </head>
 <body>
-    Gemini API Key:
-    <br>
-    <input type="text" id="apiKey">
-    <br>
-    <br>
-    <textarea id="prompt"></textarea>
-    <br>
-    <button id="run">Run</button>
-    <br>
-    <br>
-    <iframe id="game" width="800" height="600"></iframe>
+<textarea id="prompt" placeholder="Enter prompt..."></textarea>
+<button id="run">Run</button>
+<iframe id="game" width="800" height="600"></iframe>
 </body>
 </html>

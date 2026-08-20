@@ -1,3 +1,4 @@
+import { API_KEY } from '../api-key';
 
 async function callApi(apiKey: string, prompt: string): Promise<string> {
 
@@ -36,20 +37,16 @@ async function callApi(apiKey: string, prompt: string): Promise<string> {
     return data.candidates[0].content.parts[0].text;
 }
 
-const apiKeyField = (document.getElementById('apiKey') as HTMLInputElement);
-const storedApiKey = localStorage.getItem('apiKey');
-if (storedApiKey !== null) {
-    apiKeyField.value = storedApiKey;
+if (!API_KEY) {
+    alert('Please create an API key file as described in the readme.');
 }
 
-document.getElementById('run')!.addEventListener('click', async () => {
-    const apiKey = apiKeyField.value;
-    if (!apiKey) {
-        alert('Please enter your API key.');
-        return;
-    }
-    localStorage.setItem('apiKey', apiKey);
-    const prompt = (document.getElementById('prompt') as HTMLTextAreaElement).value;
-    const result = await callApi(apiKey, prompt);
-    (document.getElementById('game') as HTMLIFrameElement).srcdoc = result;
+const promptInput = document.getElementById('prompt') as HTMLTextAreaElement;
+const runButton = document.getElementById('run') as HTMLButtonElement;
+const gameIFrame = document.getElementById('game') as HTMLIFrameElement;
+
+runButton.addEventListener('click', async () => {
+    const prompt = promptInput.value;
+    const result = await callApi(API_KEY, prompt);
+    gameIFrame.srcdoc = result;
 });
