@@ -25,7 +25,6 @@
     "noPropertyAccessFromIndexSignature": true,
     "noUncheckedIndexedAccess": true,
     "noUnusedLocals": true,
-    "erasableSyntaxOnly": true,
   },
   "include": ["src"]
 }
