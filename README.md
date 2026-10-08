@@ -24,15 +24,10 @@ Installation
 
 ---
 
-### Store the key locally in this project
-   - Create a file named api-key.ts in the projects root folder.
-   - Add the following line and replace the placeholder with your key:
-
-```ts
-export const API_KEY = "YOUR_GEMINI_API_KEY_HERE";
-```
-
-**Important: Do NOT commit api-key.ts to source control. Add it to .gitignore if it isn't already.**
+### Store the key in the browser
+- When you open the app, it will check whether an API key is already saved in the browser.
+- If no key is stored yet, a prompt will ask you to enter it.
+- The key is then saved in `localStorage` so you won't need to enter it again on the same browser.
 
 ---
 

@@ -1,4 +1,47 @@
-import { API_KEY } from '../api-key';
+const API_KEY_STORAGE_KEY = 'gemini-api-key';
+
+function getStoredApiKey(): string | null {
+    try {
+        return localStorage.getItem(API_KEY_STORAGE_KEY);
+    } catch (error) {
+        console.error('Could not read the API key from localStorage.', error);
+        return null;
+    }
+}
+
+function saveApiKey(apiKey: string): void {
+    const trimmedApiKey = apiKey.trim();
+    if (!trimmedApiKey) {
+        return;
+    }
+
+    try {
+        localStorage.setItem(API_KEY_STORAGE_KEY, trimmedApiKey);
+    } catch (error) {
+        console.error('Could not save the API key to localStorage.', error);
+    }
+}
+
+function ensureApiKey(): string | null {
+    const storedApiKey = getStoredApiKey();
+    if (storedApiKey) {
+        return storedApiKey;
+    }
+
+    const enteredApiKey = window.prompt('Enter your Gemini API key. It will be saved in your browser for future use.');
+    if (!enteredApiKey) {
+        return null;
+    }
+
+    const trimmedApiKey = enteredApiKey.trim();
+    if (!trimmedApiKey) {
+        alert('Please enter a valid API key.');
+        return null;
+    }
+
+    saveApiKey(trimmedApiKey);
+    return trimmedApiKey;
+}
 
 async function callApi(apiKey: string, prompt: string): Promise<string> {
 
@@ -37,16 +80,29 @@ async function callApi(apiKey: string, prompt: string): Promise<string> {
     return data.candidates[0].content.parts[0].text;
 }
 
-if (!API_KEY) {
-    alert('Please create an API key file as described in the readme.');
-}
-
 const promptInput = document.getElementById('prompt') as HTMLTextAreaElement;
 const runButton = document.getElementById('run') as HTMLButtonElement;
 const gameIFrame = document.getElementById('game') as HTMLIFrameElement;
 
+const apiKey = ensureApiKey();
+if (!apiKey) {
+    runButton.disabled = true;
+    promptInput.disabled = true;
+    alert('Please enter an API key to generate a game.');
+}
+
 runButton.addEventListener('click', async () => {
-    const prompt = promptInput.value;
-    const result = await callApi(API_KEY, prompt);
+    const prompt = promptInput.value.trim();
+    if (!prompt) {
+        alert('Please enter a prompt before running the generator.');
+        return;
+    }
+
+    const activeApiKey = ensureApiKey();
+    if (!activeApiKey) {
+        return;
+    }
+
+    const result = await callApi(activeApiKey, prompt);
     gameIFrame.srcdoc = result;
 });
